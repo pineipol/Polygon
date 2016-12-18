@@ -21,6 +21,7 @@
     - php7.0-intl
     - php-pear
     - php7.0-dev
+    - php7.0-mbstring
 
 ##
 # Configure xdebug extension
@@ -158,6 +159,15 @@
   command: phpenmod xdebug
   args:
     creates: /etc/php/7.0/fpm/conf.d/20-xdebug.ini
+  notify:
+    - restart php7.0-fpm
+
+- name: Enable Php7 mbstring extension
+  become: yes
+  become_method: sudo
+  command: phpenmod mbstring
+  args:
+    creates: /etc/php/7.0/fpm/conf.d/20-mbstring.ini
   notify:
     - restart php7.0-fpm
 
