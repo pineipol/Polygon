@@ -1,0 +1,15 @@
+{
+    "name": "root/polygon",
+    "description": "Polygon manager",
+    "type": "project",
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Polygon\\": "src/Polygon"
+        }
+    },
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^5.7"
+    }
+}

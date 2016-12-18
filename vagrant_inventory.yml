@@ -1,0 +1,12 @@
+- name: ubuntu1604patri
+  ansible_machine_name: ubuntu1604patri.localhost
+  box: ubuntu/xenial64
+  ram: 2048
+  ip: 192.168.33.164
+  port_guest: 22
+  port_host: 2164
+  target_folder: /var/www/polygon
+  ansible_playbook: ./ansible/playbooks/playbook.yml
+  ansible_extra_vars: { php_version: 7 }
+  ansible_verbose: false # false|vvvv
+

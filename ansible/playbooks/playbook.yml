@@ -1,0 +1,60 @@
+- name: Machine provision
+  hosts: all
+  gather_facts: False
+  vars_files:
+    - ./files/variables.yml
+    - ./files/local.parameters.yml
+  tasks:
+    - name: Install python 2.7
+      become: yes
+      become_method: sudo
+      raw: apt-get update -qq && apt-get install -qq python2.7
+      when: ubuntu_family=='xenial'
+
+    - name: Add latest Ansible repository
+      become: yes
+      become_method: sudo
+      apt_repository: repo='ppa:ansible/ansible'
+
+    - name: Upgrade packages
+      become: yes
+      become_method: sudo
+      apt: upgrade=dist update_cache=yes cache_valid_time=3600
+
+    - name: Install apt packages
+      apt: pkg={{ item }} update_cache=yes cache_valid_time=3600
+      become: yes
+      become_method: sudo
+      with_items:
+        - software-properties-common
+        - python-pip
+        - python-dev
+        - ansible
+        - language-pack-en
+        - ntpdate
+        - git
+        - ant
+        - python-mysqldb
+
+    - name: Upgrade setuptools
+      become: yes
+      become_method: sudo
+      command: pip install setuptools --upgrade
+
+    - name: Echo my_env_var
+      shell: "echo export LC_ALL=C"
+
+    - name: Install Python Boto
+      become: yes
+      become_method: sudo
+      pip:
+        name: boto
+
+    - name: Configure DateTime
+      include: ./includes/datetime.yml
+
+    - name: Setup Php & Php-FPM
+      include: ./includes/php7.yml
+
+  handlers:
+    - include: ./handlers/handlers.yml

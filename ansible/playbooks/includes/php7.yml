@@ -1,0 +1,233 @@
+##
+# Install Php
+#
+- name: Install Php
+  become: yes
+  become_method: sudo
+  apt: name={{ item }} update_cache=yes state=latest cache_valid_time=3600
+  with_items:
+    - php7.0
+    - php7.0-json
+    - php7.0-sqlite3
+    - php-xdebug
+    - php7.0-cli
+    - php7.0-fpm
+    - php-imagick
+    - php7.0-common
+    - php7.0-gd
+    - php7.0-curl
+    - php7.0-mcrypt
+    - php7.0-mysql
+    - php7.0-intl
+    - php-pear
+    - php7.0-dev
+
+##
+# Configure xdebug extension
+#
+- name: Configure xdebug extension
+  become: yes
+  become_method: sudo
+  template: >
+    src=../files/xdebug.ini.j2
+    dest=/etc/php/7.0/mods-available/xdebug.ini
+
+##
+# Enable extensions
+#
+- name: Enable Php curl extension
+  become: yes
+  become_method: sudo
+  command: phpenmod curl
+  args:
+    creates: /etc/php/7.0/fpm/conf.d/20-curl.ini
+  notify:
+    - restart php7.0-fpm
+
+- name: Enable Php7 gd extension
+  become: yes
+  become_method: sudo
+  command: phpenmod gd
+  args:
+    creates: /etc/php/7.0/fpm/conf.d/20-gd.ini
+  notify:
+    - restart php7.0-fpm
+
+- name: Enable Php7 imagick extension
+  become: yes
+  become_method: sudo
+  command: phpenmod imagick
+  args:
+    creates: /etc/php/7.0/fpm/conf.d/20-imagick.ini
+  notify:
+    - restart php7.0-fpm
+
+- name: Enable Php7 intl extension
+  become: yes
+  become_method: sudo
+  command: phpenmod intl
+  args:
+    creates: /etc/php/7.0/fpm/conf.d/20-intl.ini
+  notify:
+    - restart php7.0-fpm
+
+- name: Enable Php7 json extension
+  become: yes
+  become_method: sudo
+  command: phpenmod  json
+  args:
+    creates: /etc/php/7.0/fpm/conf.d/20-json.ini
+  notify:
+    - restart php7.0-fpm
+
+- name: Enable Php7 mcrypt extension
+  become: yes
+  become_method: sudo
+  command: phpenmod mcrypt
+  args:
+    creates: /etc/php/7.0/fpm/conf.d/20-mcrypt.ini
+  notify:
+    - restart php7.0-fpm
+
+- name: Enable Php7 mysqli extension
+  become: yes
+  become_method: sudo
+  command: phpenmod mysqli
+  args:
+    creates: /etc/php/7.0/fpm/conf.d/20-mysqli.ini
+  notify:
+    - restart php7.0-fpm
+
+- name: Enable Php7 mysql extension
+  become: yes
+  become_method: sudo
+  command: phpenmod mysql
+  args:
+    creates: /etc/php/7.0/fpm/conf.d/20-mysql.ini
+  notify:
+    - restart php7.0-fpm
+
+- name: Enable Php7 pdo extension
+  become: yes
+  become_method: sudo
+  command: phpenmod pdo
+  args:
+    creates: /etc/php/7.0/fpm/conf.d/10-pdo.ini
+  notify:
+    - restart php7.0-fpm
+
+- name: Enable Php7 opcache extension
+  become: yes
+  become_method: sudo
+  command: phpenmod opcache
+  args:
+    creates: /etc/php/7.0/fpm/conf.d/05-opcache.ini
+  notify:
+    - restart php7.0-fpm
+
+- name: Enable Php7 pdo_mysql extension
+  become: yes
+  become_method: sudo
+  command: phpenmod pdo_mysql
+  args:
+    creates: /etc/php/7.0/fpm/conf.d/20-pdo_mysql.ini
+  notify:
+    - restart php7.0-fpm
+
+- name: Enable Php7 pdo_sqlite extension
+  become: yes
+  become_method: sudo
+  command: phpenmod pdo_sqlite
+  args:
+    creates: /etc/php/7.0/fpm/conf.d/20-pdo_sqlite.ini
+  notify:
+    - restart php7.0-fpm
+
+- name: Enable Php7 sqlite3 extension
+  become: yes
+  become_method: sudo
+  command: phpenmod sqlite3
+  args:
+    creates: /etc/php/7.0/fpm/conf.d/20-sqlite3.ini
+  notify:
+    - restart php7.0-fpm
+
+- name: Enable Php7 xdebug extension
+  become: yes
+  become_method: sudo
+  command: phpenmod xdebug
+  args:
+    creates: /etc/php/7.0/fpm/conf.d/20-xdebug.ini
+  notify:
+    - restart php7.0-fpm
+
+##
+# Configure ini settings
+#
+- name: Configure php-fpm ini default_charset
+  become: yes
+  become_method: sudo
+  lineinfile: >
+    dest=/etc/php/7.0/fpm/php.ini
+    regexp="^;default_charset ="
+    line="default_charset = "UTF-8""
+    state=present
+  notify:
+    - restart php7.0-fpm
+
+- name: Configure php-fpm ini date.timezone
+  become: yes
+  become_method: sudo
+  lineinfile: >
+    dest=/etc/php/7.0/fpm/php.ini
+    regexp="^;date.timezone ="
+    line="date.timezone = "Europe/Amsterdam""
+    state=present
+  notify:
+    - restart php7.0-fpm
+
+- name: Configure php-cli ini default_charset
+  become: yes
+  become_method: sudo
+  lineinfile: >
+    dest=/etc/php/7.0/cli/php.ini
+    regexp="^;default_charset ="
+    line="default_charset = "UTF-8""
+    state=present
+
+- name: Configure php-cli ini date.timezone
+  become: yes
+  become_method: sudo
+  lineinfile: >
+    dest=/etc/php/7.0/cli/php.ini
+    regexp="^;date.timezone ="
+    line="date.timezone = "Europe/Amsterdam""
+    state=present
+
+##
+# Composer install
+#
+- name: Download composer
+  get_url:
+    url: https://getcomposer.org/installer
+    dest: /tmp/installer
+  tags: composer
+
+- name: Install composer
+  shell: cat /tmp/installer | php -- --install-dir=/usr/local/bin
+  args:
+    creates: /usr/local/bin/composer
+  tags: composer
+
+- name: Rename composer.phar to composer
+  shell: mv /usr/local/bin/composer.phar /usr/local/bin/composer
+  args:
+    creates: /usr/local/bin/composer
+  tags: composer
+
+- name: Make composer executable
+  file:
+    path: /usr/local/bin/composer
+    mode: a+x
+    state: file
+  tags: composer

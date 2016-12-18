@@ -1,0 +1,8 @@
+<phpunit colors="true" bootstrap="./bootstrap.php" verbose="true" backupGlobals="false">
+    <php>
+        <ini name="memory_limit" value="1G"/>
+    </php>
+    <testsuite name="Polygon">
+        <directory suffix=".php">../Tests</directory>
+    </testsuite>
+</phpunit>
