@@ -21,7 +21,7 @@ class SquareTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     *
+     * Test that Area Method Should Return Square Area
      */
     public function testAreaMethodShouldReturnSquareArea()
     {

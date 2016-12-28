@@ -21,7 +21,7 @@ class RectangleTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     *
+     *  Test that Area Method Should Return Rectangle Area
      */
     public function testAreaMethodShouldReturnRectangleArea()
     {
