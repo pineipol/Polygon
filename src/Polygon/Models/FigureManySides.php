@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 
 namespace Polygon\Models;
-use phpDocumentor\Reflection\Types\Float_;
-
 
 /**
  * Class FigureManySides (regular)
