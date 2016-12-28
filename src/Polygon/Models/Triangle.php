@@ -15,7 +15,7 @@ class Triangle extends Figure
     /** @var float $base */
     private $base = 0;
 
-    /** @var int */
+    /** @var int $height*/
     private $height = 0;
 
     /** @var float $side2  */
