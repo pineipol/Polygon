@@ -8,16 +8,16 @@ use Polygon\Models\FigureManySides;
  *
  * Testcase for SFigureManySides class
  */
-class SFigureManySidesTest extends PHPUnit_Framework_TestCase
+class FigureManySidesTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Test that Perimeter Method Should Return SFigureManySides Perimeter
      */
     public function testPerimeterMethodShouldReturnFigureManySidesPerimeter()
     {
-        $figureManySides = new SFigureManySides(6, 10, 7);
+        $figureManySides = new FigureManySides(6, 10, 7);
 
-        $this->assertEquals(12, $figureManySides->perimeter());
+        $this->assertEquals(60, $figureManySides->perimeter());
     }
 
     /**
@@ -25,8 +25,8 @@ class SFigureManySidesTest extends PHPUnit_Framework_TestCase
      */
     public function testAreaMethodShouldReturnFigureManySidesArea()
     {
-        $figureManySides = new SFigureManySides(6, 10, 7);
+        $figureManySides = new FigureManySides(6, 10, 7);
 
-        $this->assertEquals(10.5, $figureManySides->are());
+        $this->assertEquals(210, $figureManySides->area());
     }
 }

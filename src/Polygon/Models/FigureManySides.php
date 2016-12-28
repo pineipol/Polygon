@@ -57,7 +57,8 @@ class FigureManySides extends Figure
      */
     public function area(): float
     {
-        return $this->perimeter() * $this->getApothem() / 2;
+        $thePerimeter = $this->perimeter();
+        return ($thePerimeter * $this->getApothem()) / 2;
     }
 
     /**
