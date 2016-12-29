@@ -35,7 +35,7 @@ class FigureManySides extends Figure
      */
     public function __construct($numberSides, $side, $apothem)
     {
-        $this->$numberSides = $numberSides;
+        $this->numberSides = $numberSides;
         $this->side = $side;
         $this->apothem =$apothem;
     }
